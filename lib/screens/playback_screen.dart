@@ -25,22 +25,27 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
   String _selectedMode = 'Detailed Notes'; // Default dropdown value
   final List<String> _modes = ['Detailed Notes', 'Summarization', 'Transcript'];
 
-  @override
-  void initState() {
-    super.initState();
-    _audioPlayer = AudioPlayer();
-    _setAudio();
-    _audioPlayer.onDurationChanged.listen((Duration d) {
+@override
+void initState() {
+  super.initState();
+  _audioPlayer = AudioPlayer();
+  _setAudio();
+  _audioPlayer.onDurationChanged.listen((Duration d) {
+    if (mounted) {
       setState(() => _duration = d);
-    });
-    _audioPlayer.onPositionChanged.listen((Duration p) {
+    }
+  });
+  _audioPlayer.onPositionChanged.listen((Duration p) {
+    if (mounted) {
       setState(() => _position = p);
-    });
-    _audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
+    }
+  });
+  _audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
+    if (mounted) {
       setState(() => _playerState = s);
-    });
-  }
-
+    }
+  });
+}
   void _setAudio() async {
     await _audioPlayer.setSource(DeviceFileSource(widget.filePath));
   }
@@ -88,7 +93,7 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://66dd-185-154-158-212.ngrok-free.app/transcribe'),
+        Uri.parse('https://3095-185-154-158-212.ngrok-free.app/transcribe'),
       );
       request.files.add(multipartFile);
       request.fields['mode'] = _selectedMode; // Pass selected mode as parameter

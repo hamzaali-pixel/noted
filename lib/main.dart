@@ -20,7 +20,7 @@ class AudioNotesApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => HomeScreen(),  
         '/record': (context) => RecordingScreen(),
         '/upload': (context) => UploadScreen(),
         // PlaybackScreen and GeneratedNotesScreen will be handled via onGenerateRoute

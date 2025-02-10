@@ -119,13 +119,13 @@ class _RecordingScreenState extends State<RecordingScreen> {
     return '$minutesStr:$secondsStr';
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _audioRecorder!.closeRecorder();
-    _audioRecorder = null;
-    super.dispose();
-  }
+ @override
+void dispose() {
+  _timer?.cancel(); // Cancel any running timer
+  _audioRecorder?.closeRecorder(); // Ensure recorder is properly closed
+  _audioRecorder = null;
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
