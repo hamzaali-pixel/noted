@@ -50,7 +50,7 @@ dependencies:
   flutter_quill: 
   markdown_quill:
   flutter_markdown:
-
+  sqflite: 
 
 dev_dependencies:
   flutter_test:

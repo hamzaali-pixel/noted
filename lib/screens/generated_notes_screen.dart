@@ -1,9 +1,12 @@
+// screens/generated_notes_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:markdown/markdown.dart' as md;
 import 'package:markdown_quill/markdown_quill.dart';
 import 'package:share_plus/share_plus.dart';
+import '../helpers/database_helper.dart';
+import '../models/note.dart';
 
 class GeneratedNotesScreen extends StatefulWidget {
   final String notes;
@@ -32,6 +35,63 @@ class _GeneratedNotesScreenState extends State<GeneratedNotesScreen> {
     _quillController = quill.QuillController(
       document: quill.Document.fromDelta(delta),
       selection: const TextSelection.collapsed(offset: 0),
+    );
+  }
+
+
+  // Show a dialog to ask for the note title
+  Future<void> _askForNoteTitle() async {
+    String noteTitle = '';
+    // Show a dialog to ask for the note title
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Enter Note Title'),
+          content: TextField(
+            autofocus: true,
+            decoration: InputDecoration(hintText: 'Enter title here'),
+            onChanged: (value) {
+              noteTitle = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (noteTitle.isNotEmpty) {
+                  // Save the note when a valid title is entered
+                  _saveNote(noteTitle);
+                  Navigator.of(context).pop();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please enter a title')),
+                  );
+                }
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Save note to local database
+  void _saveNote(String title) async {
+    Note newNote = Note(
+      title: title,
+      content: widget.notes,
+      createdAt: DateTime.now(),
+    );
+    await DatabaseHelper.insertNote(newNote);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Note saved successfully')),
     );
   }
 
@@ -138,6 +198,11 @@ class _GeneratedNotesScreenState extends State<GeneratedNotesScreen> {
                     },
                     icon: Icon(Icons.share),
                     label: Text('Share'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: _askForNoteTitle,
+                    icon: Icon(Icons.save),
+                    label: Text('Save'),
                   ),
                 ],
               ),

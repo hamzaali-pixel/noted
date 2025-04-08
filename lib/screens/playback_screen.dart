@@ -93,7 +93,7 @@ void initState() {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://3095-185-154-158-212.ngrok-free.app/transcribe'),
+        Uri.parse('https://09d5-185-154-158-212.ngrok-free.app/transcribe'),
       );
       request.files.add(multipartFile);
       request.fields['mode'] = _selectedMode; // Pass selected mode as parameter
