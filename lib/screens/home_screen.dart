@@ -1,4 +1,5 @@
 // home_screen.dart
+
 import 'package:flutter/material.dart';
 import '../widgets/animated_button.dart';
 
@@ -101,6 +102,19 @@ class HomeScreen extends StatelessWidget {
                     },
                     icon: const Icon(Icons.folder_open),
                     label: const Text('Upload from Library'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      backgroundColor: const Color.fromARGB(255, 238, 222, 255),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  // Navigate to Notes Library Button
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/notesLibrary'); // Navigate to Notes Library
+                    },
+                    icon: const Icon(Icons.book),
+                    label: const Text('View Saved Notes'),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       backgroundColor: const Color.fromARGB(255, 238, 222, 255),

@@ -5,6 +5,7 @@ import 'screens/recording_screen.dart';
 import 'screens/upload_screen.dart';
 import 'screens/playback_screen.dart';
 import 'screens/generated_notes_screen.dart';
+import 'screens/notes_library_screen.dart';
 
 void main() {
   runApp(AudioNotesApp());
@@ -20,9 +21,10 @@ class AudioNotesApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => HomeScreen(),  
         '/record': (context) => RecordingScreen(),
         '/upload': (context) => UploadScreen(),
+        '/notesLibrary': (context) => NotesLibraryScreen(),
         // PlaybackScreen and GeneratedNotesScreen will be handled via onGenerateRoute
       },
       onGenerateRoute: (settings) {

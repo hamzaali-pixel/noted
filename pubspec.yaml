@@ -40,14 +40,17 @@ dependencies:
   file_picker: 
   http: 
   http_parser:
-  flutter_markdown: 
+  markdown: 
   path_provider:
   animations: 
   flutter_spinkit: 
   share_plus:
   flutter_audio_waveforms:
   audioplayers:
-
+  flutter_quill: 
+  markdown_quill:
+  flutter_markdown:
+  sqflite: 
 
 dev_dependencies:
   flutter_test:

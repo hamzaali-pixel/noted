@@ -22,22 +22,30 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
   Duration _position = Duration();
   bool _isGenerating = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _audioPlayer = AudioPlayer();
-    _setAudio();
-    _audioPlayer.onDurationChanged.listen((Duration d) {
-      setState(() => _duration = d);
-    });
-    _audioPlayer.onPositionChanged.listen((Duration p) {
-      setState(() => _position = p);
-    });
-    _audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
-      setState(() => _playerState = s);
-    });
-  }
+  String _selectedMode = 'Detailed Notes'; // Default dropdown value
+  final List<String> _modes = ['Detailed Notes', 'Summarization', 'Transcript'];
 
+@override
+void initState() {
+  super.initState();
+  _audioPlayer = AudioPlayer();
+  _setAudio();
+  _audioPlayer.onDurationChanged.listen((Duration d) {
+    if (mounted) {
+      setState(() => _duration = d);
+    }
+  });
+  _audioPlayer.onPositionChanged.listen((Duration p) {
+    if (mounted) {
+      setState(() => _position = p);
+    }
+  });
+  _audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
+    if (mounted) {
+      setState(() => _playerState = s);
+    }
+  });
+}
   void _setAudio() async {
     await _audioPlayer.setSource(DeviceFileSource(widget.filePath));
   }
@@ -85,9 +93,10 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://965e-74-63-216-34.ngrok-free.app/transcribe'),
+        Uri.parse('https://09d5-185-154-158-212.ngrok-free.app/transcribe'),
       );
       request.files.add(multipartFile);
+      request.fields['mode'] = _selectedMode; // Pass selected mode as parameter
 
       var response = await request.send();
 
@@ -145,121 +154,135 @@ class _PlaybackScreenState extends State<PlaybackScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
-        // Navigate directly to the home screen using pushReplacementNamed
         Navigator.pushReplacementNamed(context, '/');
       },
-      child:  Scaffold(
-      body: Stack(
-        children: [
-          // Banner Container at the top
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: const Color.fromARGB(255, 39, 36, 42), // Banner background color
-              padding: const EdgeInsets.symmetric(vertical: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'lib/assets/images/icon.png', // Your image path
-                    width: 100, // Adjust the width as needed
-                    height: 100, // Adjust the height as needed
-                  ),
-                  const SizedBox(width: 10), // Spacing between image and text
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
-                    children: [
-                      const SizedBox(height: 20),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Not',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 229, 196, 255), // Text color
-                                fontSize: 32, // Font size for "Not"
-                                fontFamily: 'Horizon',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Ed.',
-                              style: TextStyle(
-                                color: const Color.fromARGB(255, 147, 59, 198), // Text color for "Ed."
-                                fontSize: 35, // Font size for "Ed."
-                                fontFamily: 'Horizon',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        'Your Note Taking Assistant',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 235, 227, 227), // Text color
-                          fontSize: 18, // Adjusted font size for readability
-                          fontFamily: 'Horizon',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Centered Playback Controls
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  IconButton(
-                    iconSize: 64,
-                    icon: Icon(
-                      _playerState == PlayerState.playing
-                          ? Icons.pause
-                          : Icons.play_arrow,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: const Color.fromARGB(255, 39, 36, 42),
+                padding: const EdgeInsets.symmetric(vertical: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'lib/assets/images/icon.png',
+                      width: 100,
+                      height: 100,
                     ),
-                    onPressed: _playPause,
-                  ),
-                  Slider(
-                    min: 0,
-                    max: _duration.inSeconds.toDouble(),
-                    value:
-                        _position.inSeconds.clamp(0, _duration.inSeconds).toDouble(),
-                    onChanged: (double value) {
-                      _audioPlayer.seek(Duration(seconds: value.toInt()));
-                    },
-                  ),
-                  Text(
-                      '${_formatDuration(_position)} / ${_formatDuration(_duration)}'),
-                  SizedBox(height: 20),
-                  _isGenerating
-                      ? Column(
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 10),
-                            Text('Generating Notes, please wait...'),
-                          ],
-                        )
-                      : ElevatedButton(
-                          onPressed: _generateNotes,
-                          child: Text('Generate Notes'),
+                    const SizedBox(width: 10),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Not',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 229, 196, 255),
+                                  fontSize: 32,
+                                  fontFamily: 'Horizon',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Ed.',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 147, 59, 198),
+                                  fontSize: 35,
+                                  fontFamily: 'Horizon',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                ],
+                        const Text(
+                          'Your Note Taking Assistant',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 235, 227, 227),
+                            fontSize: 18,
+                            fontFamily: 'Horizon',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    IconButton(
+                      iconSize: 64,
+                      icon: Icon(
+                        _playerState == PlayerState.playing
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                      ),
+                      onPressed: _playPause,
+                    ),
+                    Slider(
+                      min: 0,
+                      max: _duration.inSeconds.toDouble(),
+                      value:
+                          _position.inSeconds.clamp(0, _duration.inSeconds).toDouble(),
+                      onChanged: (double value) {
+                        _audioPlayer.seek(Duration(seconds: value.toInt()));
+                      },
+                    ),
+                    Text(
+                      '${_formatDuration(_position)} / ${_formatDuration(_duration)}',
+                    ),
+                    SizedBox(height: 20),
+                    // DropdownButton positioned below playback and above Generate Notes button
+                    DropdownButton<String>(
+                      value: _selectedMode,
+                      items: _modes.map((String mode) {
+                        return DropdownMenuItem<String>(
+                          value: mode,
+                          child: Text(mode),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedMode = newValue!;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    _isGenerating
+                        ? Column(
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 10),
+                              Text('Generating Notes, please wait...'),
+                            ],
+                          )
+                        : ElevatedButton(
+                            onPressed: _generateNotes,
+                            child: Text('Generate Notes'),
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    )
     );
   }
 }
