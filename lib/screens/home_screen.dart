@@ -1,7 +1,8 @@
-// home_screen.dart
+// 
 
 import 'package:flutter/material.dart';
 import '../widgets/animated_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -121,6 +122,46 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+          // Logout Button at the bottom
+          Positioned(
+            bottom: 30,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushNamedAndRemoveUntil(
+                      context, 
+                      '/login', 
+                      (route) => false
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error signing out: $e')),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.logout, color: Color.fromARGB(255, 123, 42, 185)),
+                label: const Text(
+                  'Logout', 
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 123, 42, 185),
+                    fontFamily: 'Horizon',
+                    fontWeight: FontWeight.bold,
+                  )
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  backgroundColor: const Color.fromARGB(255, 238, 222, 255),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
               ),
             ),
           ),
