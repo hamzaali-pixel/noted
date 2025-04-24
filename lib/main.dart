@@ -3,12 +3,6 @@ import 'package:audio_notes_app/firebase_options.dart';
 import 'package:audio_notes_app/utils/authhandler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
-import 'screens/recording_screen.dart';
-import 'screens/upload_screen.dart';
-import 'screens/playback_screen.dart';
-import 'screens/generated_notes_screen.dart';
-import 'screens/notes_library_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

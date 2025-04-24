@@ -7,7 +7,7 @@
 
 import 'package:audio_notes_app/screens/AuthScreens/loginView.dart';
 import 'package:audio_notes_app/widgets/snackbarWidget.dart';
-import 'package:audio_notes_app/widgets/textStyles.dart';
+import 'package:audio_notes_app/widgets/UI%20elements.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

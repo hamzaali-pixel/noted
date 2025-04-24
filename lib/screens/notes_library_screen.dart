@@ -1,6 +1,4 @@
-// screens/notes_library_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:share_plus/share_plus.dart';
 import '../helpers/database_helper.dart';
 import '../models/note.dart';

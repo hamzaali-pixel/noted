@@ -1,171 +1,231 @@
-// 
-
+import 'package:audio_notes_app/widgets/UI%20elements.dart';
 import 'package:flutter/material.dart';
-import '../widgets/animated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  void _showNewNotesSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+           return Column(
+  children: [
+    // 👇 The drag handle bar
+    Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Container(
+        width: 50,
+        height: 5,
+        decoration: BoxDecoration(
+          color: Colors.grey[400],
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    ),
+    const SizedBox(height: 10),
+    // 👇 The draggable content below
+    Expanded(
+      child: ListView(
+        controller: scrollController,
+        padding: const EdgeInsets.all(20),
+        children: _buildNoteTiles(),
+      ),
+    ),
+  ],
+);
+
+          },
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildNoteTilesHscreen() {
+    return [
+      const SizedBox(height: 20),
+      _buildTile(
+        icon: Icons.book,
+        title: 'View Saved Notes',
+        subtitle: 'Access your note library',
+        onTap: () => Navigator.pushNamed(context, '/notesLibrary'),
+      ),
+    ];
+  }
+
+    List<Widget> _buildNoteTiles() {
+    return [
+      const SizedBox(height: 20),
+      _buildTile(
+        icon: Icons.mic,
+        title: 'Record Audio for Notes',
+        subtitle: 'Tap to start recording a new voice note',
+        onTap: () => Navigator.pushNamed(context, '/record'),
+      ),
+      const SizedBox(height: 20),
+      _buildTile(
+        icon: Icons.folder_open,
+        title: 'Upload from Library',
+        subtitle: 'Pick an existing audio file',
+        onTap: () => Navigator.pushNamed(context, '/upload'),
+      ),
+      const SizedBox(height: 20),
+      _buildTile(
+        icon: Icons.book,
+        title: 'View Saved Notes',
+        subtitle: 'Access your note library',
+        onTap: () => Navigator.pushNamed(context, '/notesLibrary'),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Top banner with a different background color
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: const Color.fromARGB(255, 39, 36, 42), // Banner background color
-              padding: const EdgeInsets.symmetric(vertical: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(25, 5, 25, 20),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Image.asset(
-                    'lib/assets/images/icon.png', // Your image path
-                    width: 100, // Adjust the width as needed
-                    height: 100, // Adjust the height as needed
-                  ),
-                  const SizedBox(width: 10), // Spacing between image and text
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Not',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 229, 196, 255), // Change text color for better contrast
-                                fontSize: 32, // Font size for "Not"
-                                fontFamily: 'Horizon',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Ed.',
-                              style: TextStyle(
-                                color: const Color.fromARGB(255, 147, 59, 198), // Same text color for "Ed."
-                                fontSize: 35, // Smaller font size for "Ed."
-                                fontFamily: 'Horizon',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      Text('NotEd', style: homeScreenFontStyle),
                       const Text(
-                        'Your Note Taking Assistant',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 235, 227, 227), // Change text color for better contrast
-                          fontSize: 18, // Adjusted font size for readability
-                          fontFamily: 'Horizon',
-                        ),
+                        'Your notes taking assistant',
+                        style: TextStyle(fontSize: 20, fontFamily: 'Jersey10'),
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ),
-          // Centered Main Content
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Record or Upload Audio',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 123, 42, 185), // Change text color for better contrast
-                      fontSize: 24,
-                      fontFamily: 'Horizon',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  // Record Audio AnimatedButton
-                  AnimatedButton(
-                    icon: Icons.mic,
+                  const Spacer(),
+                  IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/record');
+                      Navigator.pushNamedAndRemoveUntil(context, '/settings', (route) => false,);
                     },
-                  ),
-                  const SizedBox(height: 30),
-                  // Upload Audio Button
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/upload');
-                    },
-                    icon: const Icon(Icons.folder_open),
-                    label: const Text('Upload from Library'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      backgroundColor: const Color.fromARGB(255, 238, 222, 255),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  // Navigate to Notes Library Button
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/notesLibrary'); // Navigate to Notes Library
-                    },
-                    icon: const Icon(Icons.book),
-                    label: const Text('View Saved Notes'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      backgroundColor: const Color.fromARGB(255, 238, 222, 255),
-                    ),
+                    icon: const Icon(Icons.settings_outlined,
+                        color: Color.fromARGB(255, 123, 42, 185), size: 40),
                   ),
                 ],
               ),
-            ),
-          ),
-          // Logout Button at the bottom
-          Positioned(
-            bottom: 30,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ElevatedButton.icon(
+              const Divider(),
+              const SizedBox(height: 170),
+              ..._buildNoteTilesHscreen(),
+              const Spacer(),
+              ElevatedButton.icon(
                 onPressed: () async {
                   try {
                     await FirebaseAuth.instance.signOut();
                     Navigator.pushNamedAndRemoveUntil(
-                      context, 
-                      '/login', 
-                      (route) => false
-                    );
+                        context, '/login', (route) => false);
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Error signing out: $e')),
                     );
                   }
                 },
-                icon: const Icon(Icons.logout, color: Color.fromARGB(255, 123, 42, 185)),
+                icon: const Icon(Icons.logout,
+                    color: Color.fromARGB(255, 123, 42, 185)),
                 label: const Text(
-                  'Logout', 
+                  'Logout',
                   style: TextStyle(
                     color: Color.fromARGB(255, 123, 42, 185),
                     fontFamily: 'Horizon',
                     fontWeight: FontWeight.bold,
-                  )
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   backgroundColor: const Color.fromARGB(255, 238, 222, 255),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        hoverElevation: 20,
+        backgroundColor: mainColor,
+        onPressed: () => _showNewNotesSheet(context),
+        label: const Text("New Notes",style: TextStyle(color: Colors.white),),
+        icon: const Icon(Icons.add,color: Colors.white,),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  Widget _buildTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 238, 222, 255),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 30, color: Color.fromARGB(255, 123, 42, 185)),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontFamily: 'Horizon',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 123, 42, 185),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

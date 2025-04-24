@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart'; // For MediaType
-import 'generated_notes_screen.dart';
 
 class PlaybackScreen extends StatefulWidget {
   final String filePath;
