@@ -90,6 +90,13 @@ class _HomeScreenState extends State<HomeScreen> {
         subtitle: 'Access your note library',
         onTap: () => Navigator.pushNamed(context, '/notesLibrary'),
       ),
+      const SizedBox(height: 20),
+      _buildTile(
+        icon: Icons.picture_as_pdf,
+        title: 'Generate notes from a PDF, Docx, or PPTX',
+        subtitle: 'Upload and generate notes',
+        onTap: () => Navigator.pushNamed(context, '/uploadPdf'),
+      ),
     ];
   }
 

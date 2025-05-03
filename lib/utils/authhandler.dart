@@ -3,6 +3,7 @@ import 'package:audio_notes_app/screens/AuthScreens/loginView.dart';
 import 'package:audio_notes_app/screens/Settings/settingsView.dart';
 import 'package:audio_notes_app/screens/generated_notes_screen.dart';
 import 'package:audio_notes_app/screens/home_screen.dart';
+import 'package:audio_notes_app/screens/upload_file_screen.dart';
 import 'package:audio_notes_app/screens/notes_library_screen.dart';
 import 'package:audio_notes_app/screens/playback_screen.dart';
 import 'package:audio_notes_app/screens/recording_screen.dart';
@@ -39,6 +40,7 @@ class AuthHandler extends StatelessWidget {
           routes: {
             '/': (context) => HomeScreen(), // Authenticated user's home screen
             '/record': (context) => RecordingScreen(),
+            '/uploadPdf' : (context) => UploadFileScreen(),
             '/upload': (context) => UploadScreen(),
             '/notesLibrary': (context) => NotesLibraryScreen(),
             '/login': (context) => LoginView(), 

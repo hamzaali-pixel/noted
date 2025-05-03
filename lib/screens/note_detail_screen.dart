@@ -83,54 +83,52 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Use Expanded so the editor takes only the remaining space and is scrollable:
-          quill.QuillToolbar.simple(controller: _quillController),
-          const SizedBox(height: 10),
-          // Editable Quill Editor Section
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: quill.QuillEditor.basic(
-                controller: _quillController,
+      body: SafeArea(  // ⬅️ Add this to avoid overlap with status bar
+        child: Column(
+          children: [
+            quill.QuillToolbar.simple(controller: _quillController),
+            const SizedBox(height: 10),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: quill.QuillEditor.basic(
+                  controller: _quillController,
+                ),
               ),
             ),
-          ),
-          // Buttons for Copy and Share
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(
-                        text: _quillController.document.toPlainText()));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Notes copied to clipboard')),
-                    );
-                  },
-                  icon: Icon(Icons.copy),
-                  label: Text('Copy'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Share.share(_quillController.document.toPlainText());
-                  },
-                  icon: Icon(Icons.share),
-                  label: Text('Share'),
-                ),
-                // Save Button to save the note
-                ElevatedButton.icon(
-                  onPressed: _saveNote, // Save the note when pressed
-                  icon: Icon(Icons.save),
-                  label: Text('Save'),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(
+                          text: _quillController.document.toPlainText()));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Notes copied to clipboard')),
+                      );
+                    },
+                    icon: Icon(Icons.copy),
+                    label: Text('Copy'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Share.share(_quillController.document.toPlainText());
+                    },
+                    icon: Icon(Icons.share),
+                    label: Text('Share'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: _saveNote,
+                    icon: Icon(Icons.save),
+                    label: Text('Save'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
