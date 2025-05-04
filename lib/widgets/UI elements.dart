@@ -18,4 +18,5 @@ TextStyle homeScreenFontStyle =const TextStyle(
 
 
 Color mainColor =Color(0xFF8A2BE2);
+Color themeColor = Colors.white; // Violet
 

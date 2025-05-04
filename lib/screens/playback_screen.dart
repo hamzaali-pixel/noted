@@ -85,17 +85,17 @@ void initState() {
       String mimeType = _getMimeType(extension);
 
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-        'files',
+        'file',
         audioFile.path,
         contentType: MediaType.parse(mimeType),
       );
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://09d5-185-154-158-212.ngrok-free.app/transcribe'),
+        Uri.parse('https://bc2d-185-154-158-212.ngrok-free.app/transcribe'),
       );
       request.files.add(multipartFile);
-      request.fields['mode'] = _selectedMode; // Pass selected mode as parameter
+      request.fields['mode'] = _selectedMode; 
 
       var response = await request.send();
 

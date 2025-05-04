@@ -129,68 +129,11 @@ void dispose() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Stack(
         children: [
           // Banner Container at the top
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: const Color.fromARGB(255, 39, 36, 42), // Banner background color
-              padding: const EdgeInsets.symmetric(vertical: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'lib/assets/images/icon.png', // Your image path
-                    width: 100, // Adjust the width as needed
-                    height: 100, // Adjust the height as needed
-                  ),
-                  const SizedBox(width: 10), // Spacing between image and text
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
-                    children: [
-                      const SizedBox(height: 20),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Not',
-                              style: TextStyle(
-                                color:  Color.fromARGB(255, 229, 196, 255), // Change text color for better contrast
-                                fontSize: 32, // Font size for "Not"
-                                fontFamily: 'Horizon',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Ed.',
-                              style: TextStyle(
-                                color: const Color.fromARGB(255, 147, 59, 198), // Same text color for "Ed."
-                                fontSize: 35, // Smaller font size for "Ed."
-                                fontFamily: 'Horizon',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        'Your Note Taking Assistant',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 235, 227, 227), // Change text color for better contrast
-                          fontSize: 18, // Adjusted font size for readability
-                          fontFamily: 'Horizon',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+          
           // Centered Recording Controls
           Align(
             alignment: Alignment.center,
