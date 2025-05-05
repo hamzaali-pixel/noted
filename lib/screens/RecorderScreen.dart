@@ -341,38 +341,36 @@ class _RecorderScreenState extends State<RecorderScreen> with SingleTickerProvid
         SizedBox(height: 20),
         
         // Recording Button
-        InkWell(
-          onTap: () {
-            if (_isRecording) {
-              if (_isPaused) {
-                _resumeRecording();
+        Material(
+          shape: CircleBorder(),
+          elevation: 6,
+          shadowColor: Colors.black26,
+          child: InkWell(
+            onTap: () {
+              if (_isRecording) {
+                if (_isPaused) {
+                  _resumeRecording();
+                } else {
+                  _pauseRecording();
+                }
               } else {
-                _pauseRecording();
+                _startRecording();
               }
-            } else {
-              _startRecording();
-            }
-          },
-          child: Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _isRecording && !_isPaused
-                  ? Color.fromARGB(255, 255, 17, 0)
-                  : Color.fromARGB(255, 123, 42, 185),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  spreadRadius: 1,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(
-              _isRecording && !_isPaused ? Icons.pause : Icons.mic,
-              size: 50,
-              color: Colors.white,
+            },
+            customBorder: CircleBorder(),
+            child: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _isRecording && !_isPaused
+                    ? Color.fromARGB(255, 255, 17, 0)
+                    : Color.fromARGB(255, 123, 42, 185),
+              ),
+              child: Icon(
+                _isRecording && !_isPaused ? Icons.pause : Icons.mic,
+                size: 50,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -434,33 +432,31 @@ class _RecorderScreenState extends State<RecorderScreen> with SingleTickerProvid
             ),
             
             // Play/Pause Button
-            InkWell(
-              onTap: _playPause,
-              child: Container(
-                padding: EdgeInsets.all(16),
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 123, 42, 185),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  _playerState == ap.PlayerState.playing
-                      ? Icons.pause
-                      : Icons.play_arrow,
-                  size: 40,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            
+            Material(
+  shape: CircleBorder(),
+  elevation: 6,
+  shadowColor: Colors.black26,
+  child: InkWell(
+    onTap: _playPause,
+    customBorder: CircleBorder(),
+    child: Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color.fromARGB(255, 123, 42, 185),
+      ),
+      child: Icon(
+        _playerState == ap.PlayerState.playing
+            ? Icons.pause
+            : Icons.play_arrow,
+        size: 40,
+        color: Colors.white,
+      ),
+    ),
+  ),
+),
+
             // Forward 10 seconds
             IconButton(
               icon: Icon(Icons.forward_10, size: 36),

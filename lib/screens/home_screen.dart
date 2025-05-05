@@ -665,6 +665,13 @@ class _HomeScreenState extends State<HomeScreen> {
         subtitle: 'Pick an existing audio file',
         onTap: () {_pickFile(context);},
       ),
+      const SizedBox(height: 20),
+      _buildTile(
+        icon: Icons.picture_as_pdf,
+        title: 'Generate notes from a PDF, Docx, or PPTX',
+        subtitle: 'Upload and generate notes',
+        onTap: () => Navigator.pushNamed(context, '/uploadPdf'),
+      ),
     ];
   }
 
@@ -694,69 +701,66 @@ class _HomeScreenState extends State<HomeScreen> {
     return name.length > 10 ? name.substring(0, 7) + '...' : name;
   }
 
-  Widget _buildFolderCircle(String folder) {
-    bool isSelected = _selectedFolder == folder;
-    
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _selectedFolder = folder;
-            _saveFolderData(); // Save state
-          });
-        },
-        onLongPress: () {
-          _deleteFolder(folder);
-        },
-        borderRadius: BorderRadius.circular(30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
+ Widget _buildFolderCircle(String folder) {
+  bool isSelected = _selectedFolder == folder;
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Material(
+          shape: CircleBorder(),
+          color: isSelected
+              ? Color.fromARGB(255, 123, 42, 185)
+              : Color.fromARGB(255, 238, 222, 255),
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                _selectedFolder = folder;
+                _saveFolderData(); // Save state
+              });
+            },
+            onLongPress: () {
+              _deleteFolder(folder);
+            },
+            customBorder: CircleBorder(),
+            child: Container(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
-                color: isSelected 
-                    ? Color.fromARGB(255, 123, 42, 185)
-                    : Color.fromARGB(255, 238, 222, 255),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isSelected 
-                      ? Color.fromARGB(255, 123, 42, 185)
-                      : Colors.transparent,
-                  width: 1,
-                ),
-              ),
+              alignment: Alignment.center,
               child: Icon(
                 _folderIcons[folder] ?? Icons.folder,
-                color: isSelected 
-                    ? Colors.white 
+                color: isSelected
+                    ? Colors.white
                     : Color.fromARGB(255, 123, 42, 185),
                 size: 30,
               ),
             ),
-            SizedBox(height: 8),
-            Text(
-              _truncateFolderName(folder),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected 
-                    ? Color.fromARGB(255, 123, 42, 185)
-                    : Colors.black87,
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
+        SizedBox(height: 8),
+        Text(
+          _truncateFolderName(folder),
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            color: isSelected
+                ? Color.fromARGB(255, 123, 42, 185)
+                : Colors.black87,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildNoteTile(Note note) {
-    String notePreview = note.content.replaceAll('#', '').length > 100
-        ? note.content.replaceAll('#', '').substring(0, 25) + "..."
-        : note.content.replaceAll('#', '');
+   String notePreview = note.content.replaceAll(RegExp(r'[#*]'), '').length > 100
+    ? note.content.replaceAll(RegExp(r'[#*]'), '').substring(0, 23) + "..."
+    : note.content.replaceAll(RegExp(r'[#*]'), '');
+
 
     return InkWell(
       onTap: () {
@@ -896,18 +900,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           InkWell(
                             onTap: _addNewFolder,
-                            borderRadius: BorderRadius.circular(30),
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: Color.fromARGB(255, 123, 42, 185),
-                                size: 30,
+                            borderRadius: BorderRadius.circular(
+                                30), // for consistent tap animation
+                            child: Material(
+                              color: Colors.grey[200],
+                              shape:
+                                  CircleBorder(), // Ensures ripple is circular
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.add,
+                                  color: Color.fromARGB(255, 123, 42, 185),
+                                  size: 30,
+                                ),
                               ),
                             ),
                           ),

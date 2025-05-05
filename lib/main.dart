@@ -10,6 +10,7 @@ import 'package:audio_notes_app/screens/home_screen.dart';
 import 'package:audio_notes_app/screens/notes_library_screen.dart';
 import 'package:audio_notes_app/screens/playback_screen.dart';
 import 'package:audio_notes_app/screens/recording_screen.dart';
+import 'package:audio_notes_app/screens/upload_file_screen.dart';
 import 'package:audio_notes_app/screens/upload_screen.dart';
 import 'package:audio_notes_app/utils/authhandler.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,6 +45,8 @@ class AudioNotesApp extends StatelessWidget {
           '/settings': (context) => SettingsScreen(),
           '/recorder': (context) => RecorderScreen(),
           '/myNotesLibrary': (context) => MyNotesLibraryScreen(),
+          '/uploadPdf': (context) => UploadFileScreen(),
+
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/playback') {
