@@ -268,9 +268,9 @@ class _RecorderScreenState extends State<RecorderScreen> with SingleTickerProvid
           _isGenerating = false;
         });
 
-        Navigator.pushNamed(
+        Navigator.pushNamedAndRemoveUntil(
           context,
-          '/generatedNotes',
+          '/generatedNotes',(route) => false,
           arguments: notes,
         );
       } else {
