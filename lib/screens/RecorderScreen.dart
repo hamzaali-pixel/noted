@@ -268,9 +268,9 @@ class _RecorderScreenState extends State<RecorderScreen> with SingleTickerProvid
           _isGenerating = false;
         });
 
-        Navigator.pushNamedAndRemoveUntil(
+        Navigator.pushNamed(
           context,
-          '/generatedNotes',(route) => false,
+          '/generatedNotes',
           arguments: notes,
         );
       } else {
@@ -638,7 +638,7 @@ height: 50,
                                   alignment: Alignment.center,
                                   child: IconButton(
                                     onPressed: () {
-                                      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                                      Navigator.pushNamed(context, '/');
                                     },
                                     icon: Icon(
                                       Icons.arrow_back_ios_new_rounded,
